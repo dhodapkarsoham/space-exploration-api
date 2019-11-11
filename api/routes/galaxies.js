@@ -15,7 +15,7 @@ router.get('/', (req, res, next) => {
 });
 
 //Admin funtion
-router.post('/', (req, res, next) => {
+router.post('/', (req, res) => {
     console.log('Inside POST');
     const galaxy = new Galaxy({
         _id: new mongoose.Types.ObjectId(),
@@ -28,8 +28,8 @@ router.post('/', (req, res, next) => {
         .then(result => {
             console.log(result);
         })
-    .catch(err => console.log(err));
-    res.status(200).json({
+        .catch(err => console.log(err));
+    res.status(201).json({
         message: 'Handling POST requests to /galaxies',
         createdGalaxy: galaxy
     });

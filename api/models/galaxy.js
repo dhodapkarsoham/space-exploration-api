@@ -5,6 +5,6 @@ const galaxySchema = mongoose.Schema({
     galaxyName: String,
     galaxyDistance: String,
     galaxyDescription: String
-});
+}, {collection: 'galaxies'});
 
 module.exports = mongoose.model('Galaxy', galaxySchema);

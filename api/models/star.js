@@ -5,6 +5,6 @@ const starSchema = mongoose.Schema({
     starName: String,
     starDistance: String,
     starDescription: String
-});
+}, {collection: "stars"});
 
 module.exports = mongoose.model('Star', starSchema);

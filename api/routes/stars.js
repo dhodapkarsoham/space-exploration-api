@@ -13,7 +13,7 @@ router.get('/', (req, res, next) => {
 });
 
 // Admin function
-router.post('/', (req, res, next) => {
+router.post('/', (req, res) => {
     console.log('Inside POST');
     const star = new Star({
         _id: new mongoose.Types.ObjectId(),
@@ -25,7 +25,6 @@ router.post('/', (req, res, next) => {
         .save()
         .then(result => {
             console.log(result);
-            
         })
         .catch(err => console.log(err));
     res.status(201).json({

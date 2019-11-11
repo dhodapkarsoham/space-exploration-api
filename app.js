@@ -1,6 +1,8 @@
 const express = require('express');
-
 const app = express();
+
+const dotenv = require('dotenv');
+dotenv.config();
 
 const morgan = require('morgan');
 
@@ -11,17 +13,19 @@ const mongoose = require('mongoose');
 const galaxyRoutes = require('./api/routes/galaxies');
 const starRoutes = require('./api/routes/stars');
 
+const pwd = process.env.MONGO_ATLAS_CONN;
+console.log(pwd);
+
+
 mongoose.connect(
-    "mongodb+srv://sohamdhodapkar:" + 
-    process.env.MONGO_ATLAS_PW + 
-    "@si-cluster-yvhtc.azure.mongodb.net/test?retryWrites=true&w=majority", 
+    process.env.MONGO_ATLAS_CONN,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
-    }
-    
+    }, 
+    () => console.log('DB connected')
 );
-console.log('Database Connected');
+// console.log('Database Connected');
 
 
 app.use(morgan('dev'));
