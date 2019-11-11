@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 const Galaxy = require('../models/galaxy');
 
-router.get('/ab', (req, res, next) => {
+router.get('/', (req, res, next) => {
     res.status(200).json({
         message: 'Handling GET requests to /galaxies'
     });
@@ -27,7 +27,7 @@ router.post('/', (req, res, next) => {
         .save()
         .then(result => {
             console.log(result);
-    })
+        })
     .catch(err => console.log(err));
     res.status(200).json({
         message: 'Handling POST requests to /galaxies',
