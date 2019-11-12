@@ -82,7 +82,7 @@ router.get('/:starId', (req, res, next) => {
     //* Can write the below code for star name as well, change .findById(id) to .find(name)
     //? DO WE NEED TO WRITE ANOTHER GET METHOD ALTOGETHER?
 
-    const id = req.params.starId;
+    const id = req.params.starId; //TODO: req.body & starName
     Star.findById(id)
         .select("_id starName starDistance starDescription")
         .exec()
@@ -104,7 +104,7 @@ router.get('/:starId', (req, res, next) => {
 
 //! Admin only function
 router.patch("/:starId", (req, res, next) => {
-    const id = req.params.starId;
+    const id = req.params.starId; //TODO: req.body & starName
     const updateOps = {};
     for (const ops of req.body) {
         updateOps[ops.propName] = ops.value;
@@ -131,11 +131,18 @@ router.patch("/:starId", (req, res, next) => {
 
 //! Admin only function
 router.delete("/:starId", (req, res, next) => {
-    const id = req.params.starId;
+    const id = req.params.starId; //TODO: req.body & on starName
     Star.remove({ _id: id })
         .exec()
         .then(result => {
-            res.status(200).json(result);
+            res.status(200).json({
+                message: "Star deleted from the database",
+                request: {
+                    type: "POST",
+                    url: "https://localhost:5000/stars",
+                    body: { starName: 'String', starDistance: 'String', starDescription: 'String'}
+                }
+            });
         })
         .catch(err => {
             console.log(err);

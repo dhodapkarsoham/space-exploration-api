@@ -6,7 +6,7 @@ const Galaxy = require('../models/galaxy');
 
 router.get('/', (req, res, next) => {
     Galaxy.find()
-        .select("_id galaxyName galaxyDistance galaxyDescription")
+        .select("_id galaxyName")
         .exec()
         .then(docs => {
             const response = {
@@ -83,7 +83,7 @@ router.get('/:galaxyId', (req, res, next) => {
     //* Can write the below code for galaxy name as well, change findById(id) to find(name)
     //? DO WE NEED TO WRITE ANOTHER GET METHOD ALTOGETHER?
 
-    const id = req.params.galaxyId;
+    const id = req.params.galaxyId; //TODO: req.body & galaxyName
     Galaxy.findById(id)
         .select("_id galaxyName galaxyDistance galaxyDescription")
         .exec()
@@ -103,7 +103,7 @@ router.get('/:galaxyId', (req, res, next) => {
 
 //! Admin only function
 router.patch("/:galaxyId", (req, res, next) => {
-    const id = req.params.galaxyId;
+    const id = req.params.galaxyId; //TODO: req.body & on galaxyName
     const updateOps = {};
     for (const ops of req.body) {
         updateOps[ops.propName] = ops.value;
@@ -130,11 +130,18 @@ router.patch("/:galaxyId", (req, res, next) => {
 
 //! Admin only function
 router.delete("/:galaxyId", (req, res, next) => {
-    const id = req.params.galaxyId;
+    const id = req.params.galaxyId; //TODO: req.body & on galaxyName
     Galaxy.remove({ _id: id })
         .exec()
         .then(result => {
-            res.status(200).json(result);
+            res.status(200).json({
+                message: "Galaxy deleted from databas",
+                request: {
+                    type: "POST",
+                    url: "https://localhost:5000/galaxies",
+                    body: { galaxyName: 'String', galaxyDistance: 'String', galaxyDescription: 'String'}
+                }
+            });
         })
         .catch(err => {
             console.log(err);
