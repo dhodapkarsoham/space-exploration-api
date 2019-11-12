@@ -6,11 +6,26 @@ const Star = require('../models/star');
 
 router.get('/', (req, res, next) => {
     Star.find()
+        .select("_id starName starDistance starDescription")
         .exec()
         .then(docs => {
-            console.log(docs);
+            const response = {
+                count: docs.length,
+                stars: docs.map(doc => {
+                    return {
+                        _id: doc._id,
+                        starName: doc.starName,
+                        starDistance: doc.starDistance,
+                        starDescription: doc.starDescription,
+                        request: {
+                            type: "GET",
+                            url: "http://localhost:5000/stars/" + doc._id
+                        }
+                    }
+                })
+            };
             // if (docs.length >= 0) {
-            res.status(200).json(docs);
+            res.status(200).json(response);
                         // } else {
             //     res.status(404).json({
             //         message: "No entries found in the database"
@@ -39,8 +54,17 @@ router.post('/', (req, res) => {
         .then(result => {
             console.log(result);
             res.status(201).json({
-                message: 'Stars posted',
-                createdStar: result
+                message: 'Created a star entry sucessfully',
+                createdStar: {
+                    starName: result.starName,
+                    starDistance: result.starDistance,
+                    starDescription: result.starDescription,
+                    _id: result._id,
+                    request: {
+                        type: "GET",
+                        url: "http://localhost:5000/stars/" + result._id
+                    }
+                }
             });
         })
         .catch(err => {
@@ -60,6 +84,7 @@ router.get('/:starId', (req, res, next) => {
 
     const id = req.params.starId;
     Star.findById(id)
+        .select("_id starName starDistance starDescription")
         .exec()
         .then(doc => {
             console.log("From database: ", doc);
@@ -88,7 +113,13 @@ router.patch("/:starId", (req, res, next) => {
         .exec()
         .then(result => {
             console.log(result);
-            res.status(200).json(result);
+            res.status(200).json({
+                message: "Star information updated",
+                request: {
+                    type: "GET",
+                    url: "http://localhost:5000/stars/" + id
+                }
+            });
         })
         .catch(err => {
             console.log(err);

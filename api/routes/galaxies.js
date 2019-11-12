@@ -6,11 +6,26 @@ const Galaxy = require('../models/galaxy');
 
 router.get('/', (req, res, next) => {
     Galaxy.find()
+        .select("_id galaxyName galaxyDistance galaxyDescription")
         .exec()
         .then(docs => {
-            console.log(docs);
+            const response = {
+                count: docs.length,
+                galaxies: docs.map(doc => {
+                    return {
+                        _id: doc._id,
+                        galaxyName: doc.galaxyName,
+                        galaxyDistance: doc.galaxyDistance,
+                        galaxyDescription: doc.galaxyDescription,
+                        request: {
+                            type: "GET",
+                            url: "http://localhost:5000/galaxies/" + doc._id
+                        }
+                    }
+                })
+            };
             // if (docs.length >= 0) {
-                res.status(200).json(docs);
+                res.status(200).json(response);
             // } else {
             //     res.status(404).json({
             //         message: "No entries found in the database"
@@ -40,8 +55,17 @@ router.post('/', (req, res) => {
         .then(result => {
             console.log(result);
             res.status(201).json({
-                message: 'Handling POST requests to /galaxies',
-                createdGalaxy: result
+                message: "Created a galaxy entry sucessfully",
+                createdGalaxy: {
+                    galaxyName:result.galaxyName,
+                    galaxyDistance:result.galaxyDistance,
+                    galaxyDescription:result.galaxyDescription,
+                    _id: result._id,
+                    request: {
+                        type: "GET",
+                        url: "http://localhost:5000/galaxies/" + result._id
+                    }
+                }
             });
         })
         .catch(err => {
@@ -61,6 +85,7 @@ router.get('/:galaxyId', (req, res, next) => {
 
     const id = req.params.galaxyId;
     Galaxy.findById(id)
+        .select("_id galaxyName galaxyDistance galaxyDescription")
         .exec()
         .then(doc => {
             console.log("From database: ", doc);
@@ -87,7 +112,13 @@ router.patch("/:galaxyId", (req, res, next) => {
         .exec()
         .then(result => {
             console.log(result);
-            res.status(200).json(result);
+            res.status(200).json({
+                message: "Galaxy information updated",
+                request: {
+                    type: "GET",
+                    url: "http://localhost:5000/galaxies/" + id
+                }
+            });
         })
         .catch(err => {
             console.log(err);
