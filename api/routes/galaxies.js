@@ -1,9 +1,7 @@
 const express = require('express');
-
 const router = express.Router();
 
 const mongoose = require('mongoose');
-
 const Galaxy = require('../models/galaxy');
 
 router.get('/', (req, res, next) => {
@@ -14,7 +12,7 @@ router.get('/', (req, res, next) => {
     
 });
 
-//Admin funtion
+//! Admin only funtion
 router.post('/', (req, res) => {
     console.log('Inside POST');
     const galaxy = new Galaxy({
@@ -27,26 +25,37 @@ router.post('/', (req, res) => {
         .save()
         .then(result => {
             console.log(result);
+            res.status(201).json({
+                message: 'Handling POST requests to /galaxies',
+                createdGalaxy: result
+            });
         })
-        .catch(err => console.log(err));
-    res.status(201).json({
-        message: 'Handling POST requests to /galaxies',
-        createdGalaxy: galaxy
-    });
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error:err
+            })
+            
+        });
 });
 
-router.get('/:galaxyName', (req, res, next) => {
-    const name = req.params.galaxyName;
-    if (name == 'andromeda') {
-        res.status(200).json({
-            message: 'You reached Andromeda',
-            name: name
-        });
-    } else {
-        res.status(200).json({
-            message: 'You passed a name'
+router.get('/:galaxyId', (req, res, next) => {
+
+    // const name = req.params.galaxyName; 
+    //* Can write the below code for galaxy name as well, change findById(id) to find(name)
+    //? DO WE NEED TO WRITE ANOTHER GET METHOD ALTOGETHER?
+
+    const id = req.params.galaxyId;
+    Galaxy.findById(id)
+        .exec()
+        .then(doc => {
+            console.log("From database: ", doc);
+            res.status(200).json(doc);
         })
-    }
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({error: err})
+        });
 });
 
 module.exports = router;

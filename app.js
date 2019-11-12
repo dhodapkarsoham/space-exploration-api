@@ -10,9 +10,11 @@ const bodyParser = require('body-parser');
 
 const mongoose = require('mongoose');
 
+// ROUTES DECLARATION
 const galaxyRoutes = require('./api/routes/galaxies');
 const starRoutes = require('./api/routes/stars');
 
+//TODO: REMOVE BEFORE FINAL DEPLOYMENT
 const pwd = process.env.MONGO_ATLAS_CONN;
 console.log(pwd);
 
@@ -25,12 +27,13 @@ mongoose.connect(
     }, 
     () => console.log('DB connected')
 );
-// console.log('Database Connected');
-
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+
+//! COMMENTED OUT BECAUSE OF ACCESS PROBLEMS TO LOCALHOST
+//TODO: FIGURE OUT WHAT'S GOING WRONG
 // app.use((req, res, next) => {
 //     res.header("Access-Control-Allow-Origin","*");
 //     res.header(
