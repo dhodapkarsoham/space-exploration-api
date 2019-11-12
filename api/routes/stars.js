@@ -5,9 +5,24 @@ const mongoose = require('mongoose');
 const Star = require('../models/star');
 
 router.get('/', (req, res, next) => {
-    res.status(200).json({
-        message: 'Handling GET requests to /stars'
-    });
+    Star.find()
+        .exec()
+        .then(docs => {
+            console.log(docs);
+            // if (docs.length >= 0) {
+            res.status(200).json(docs);
+                        // } else {
+            //     res.status(404).json({
+            //         message: "No entries found in the database"
+            //     });
+            // }
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
 });
 
 //! Admin only function
@@ -48,7 +63,11 @@ router.get('/:starId', (req, res, next) => {
         .exec()
         .then(doc => {
             console.log("From database: ", doc);
-            res.status(200).json(doc);
+            if (doc) {
+                res.status(200).json(doc);
+            } else {
+                res.status(404).json({message: "No valid entry found for the provided ID!"});
+            }
         })
         .catch(err => {
             console.log(err);
@@ -56,6 +75,43 @@ router.get('/:starId', (req, res, next) => {
                 error: err
             })
         })
+});
+
+//! Admin only function
+router.patch("/:starId", (req, res, next) => {
+    const id = req.params.starId;
+    const updateOps = {};
+    for (const ops of req.body) {
+        updateOps[ops.propName] = ops.value;
+    }
+    Star.update({ _id: id}, { $set: updateOps })
+        .exec()
+        .then(result => {
+            console.log(result);
+            res.status(200).json(result);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            })
+        });
+})
+
+//! Admin only function
+router.delete("/:starId", (req, res, next) => {
+    const id = req.params.starId;
+    Star.remove({ _id: id })
+        .exec()
+        .then(result => {
+            res.status(200).json(result);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
 });
 
 module.exports = router;
