@@ -69,12 +69,9 @@ exports.galaxies_create_galaxy = (req, res) => {
 
 exports.galaxies_getOne_galaxy = (req, res, next) => {
 
-    // const name = req.params.galaxyName; 
-    //* Can write the below code for galaxy name as well, change findById(id) to find(name)
-    //? DO WE NEED TO WRITE ANOTHER GET METHOD ALTOGETHER?
-
-    const id = req.params.galaxyId; //TODO: req.body & galaxyName
-    Galaxy.findById(id)
+    // const id = req.params.galaxyId; //TODO: req.body & galaxyName
+    const name = req.body.galaxyName; 
+    Galaxy.find({galaxyName: name})
         .select("_id galaxyName galaxyDistance galaxyDescription")
         .exec()
         .then(doc => {
@@ -82,7 +79,7 @@ exports.galaxies_getOne_galaxy = (req, res, next) => {
             if (doc) {
                 res.status(200).json(doc);
             } else {
-                res.status(404).json({message: "No valid entry found for provided ID!"});
+                res.status(404).json({message: "No valid entry found for provided galaxy name!"});
             }
         })
         .catch(err => {
@@ -91,39 +88,14 @@ exports.galaxies_getOne_galaxy = (req, res, next) => {
         });
 }
 
-exports.galaxies_update_galaxy = (req, res, next) => {
-    const id = req.params.galaxyId; //TODO: req.body & on galaxyName
-    const updateOps = {};
-    for (const ops of req.body) {
-        updateOps[ops.propName] = ops.value;
-    }
-    Galaxy.update({ _id: id}, { $set: updateOps })
-        .exec()
-        .then(result => {
-            console.log(result);
-            res.status(200).json({
-                message: "Galaxy information updated",
-                request: {
-                    type: "GET",
-                    url: "http://localhost:5000/galaxies/" + id
-                }
-            });
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            })
-        });
-}
-
 exports.galaxies_delete_galaxy = (req, res, next) => {
-    const id = req.params.galaxyId; //TODO: req.body & on galaxyName
-    Galaxy.remove({ _id: id })
+    // const id = req.params.galaxyId; //TODO: req.body & on galaxyName
+    const name = req.body.galaxyName;
+    Galaxy.remove({ galaxyName: name })
         .exec()
         .then(result => {
             res.status(200).json({
-                message: "Galaxy deleted from databas",
+                message: "Galaxy deleted from database",
                 request: {
                     type: "POST",
                     url: "https://localhost:5000/galaxies",
@@ -138,3 +110,32 @@ exports.galaxies_delete_galaxy = (req, res, next) => {
             });
         });
 }
+
+//* PUTTING IT IN FUTURE SCOPE, A BIT MORE OF A WORK
+
+// exports.galaxies_update_galaxy = (req, res, next) => {
+//     // const id = req.params.galaxyId; //TODO: req.body & on galaxyName
+//     const name = req.body.galaxyName;
+//     const updateOps = {};
+//     for (const ops of req.body) {
+//         updateOps[ops.propName] = ops.value;
+//     }
+//     Galaxy.update({ galaxyName: name}, { $set: updateOps })
+//         .exec()
+//         .then(result => {
+//             console.log(result);
+//             res.status(200).json({
+//                 message: "Galaxy information updated",
+//                 request: {
+//                     type: "GET",
+//                     url: "http://localhost:5000/galaxies/" + Galaxy._id
+//                 }
+//             });
+//         })
+//         .catch(err => {
+//             console.log(err);
+//             res.status(500).json({
+//                 error: err
+//             })
+//         });
+// }

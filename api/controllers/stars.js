@@ -68,13 +68,10 @@ exports.stars_create_star = (req, res, next) => {
 }
 
 exports.stars_getOne_star = (req, res, next) => {
-    
-    // const name = req.param.starName; 
-    //* Can write the below code for star name as well, change .findById(id) to .find(name)
-    //? DO WE NEED TO WRITE ANOTHER GET METHOD ALTOGETHER?
 
-    const id = req.params.starId; //TODO: req.body & starName
-    Star.findById(id)
+    // const id = req.params.starId; //TODO: req.body & starName
+    const name = req.body.starName;
+    Star.find({starName: name})
         .select("_id starName starDistance starDescription")
         .exec()
         .then(doc => {
@@ -82,7 +79,7 @@ exports.stars_getOne_star = (req, res, next) => {
             if (doc) {
                 res.status(200).json(doc);
             } else {
-                res.status(404).json({message: "No valid entry found for the provided ID!"});
+                res.status(404).json({message: "No valid entry found for the provided star name!"});
             }
         })
         .catch(err => {
@@ -93,35 +90,10 @@ exports.stars_getOne_star = (req, res, next) => {
         })
 }
 
-exports.stars_update_star = (req, res, next) => {
-    const id = req.params.starId; //TODO: req.body & starName
-    const updateOps = {};
-    for (const ops of req.body) {
-        updateOps[ops.propName] = ops.value;
-    }
-    Star.update({ _id: id}, { $set: updateOps })
-        .exec()
-        .then(result => {
-            console.log(result);
-            res.status(200).json({
-                message: "Star information updated",
-                request: {
-                    type: "GET",
-                    url: "http://localhost:5000/stars/" + id
-                }
-            });
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            })
-        });
-}
-
 exports.stars_delete_star = (req, res, next) => {
-    const id = req.params.starId; //TODO: req.body & on starName
-    Star.remove({ _id: id })
+    // const id = req.params.starId; //TODO: req.body & on starName
+    const name = req.body.starName;
+    Star.remove({ starName: name })
         .exec()
         .then(result => {
             res.status(200).json({
@@ -140,3 +112,32 @@ exports.stars_delete_star = (req, res, next) => {
             });
         });
 }
+
+
+//* PUTTING IT IN FUTURE SCOPE, A BIT MORE OF A WORK
+
+// exports.stars_update_star = (req, res, next) => {
+//     const id = req.params.starId; //TODO: req.body & starName
+//     const updateOps = {};
+//     for (const ops of req.body) {
+//         updateOps[ops.propName] = ops.value;
+//     }
+//     Star.update({ _id: id}, { $set: updateOps })
+//         .exec()
+//         .then(result => {
+//             console.log(result);
+//             res.status(200).json({
+//                 message: "Star information updated",
+//                 request: {
+//                     type: "GET",
+//                     url: "http://localhost:5000/stars/" + id
+//                 }
+//             });
+//         })
+//         .catch(err => {
+//             console.log(err);
+//             res.status(500).json({
+//                 error: err
+//             })
+//         });
+// }
