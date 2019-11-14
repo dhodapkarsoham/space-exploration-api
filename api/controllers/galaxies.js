@@ -114,7 +114,7 @@ exports.galaxies_delete_galaxy = (req, res, next) => {
 //* PUTTING IT IN FUTURE SCOPE, A BIT MORE OF A WORK
 
 // exports.galaxies_update_galaxy = (req, res, next) => {
-//     // const id = req.params.galaxyId; //TODO: req.body & on galaxyName
+    // const id = req.params.galaxyId; //TODO: req.body & on galaxyName
 //     const name = req.body.galaxyName;
 //     const updateOps = {};
 //     for (const ops of req.body) {
