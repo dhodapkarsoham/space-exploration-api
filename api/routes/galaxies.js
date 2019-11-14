@@ -12,7 +12,7 @@ router.get('/', GalaxyController.galaxies_get_all);
 router.get('/galaxy', GalaxyController.galaxies_getOne_galaxy);
 
 //! Admin only funtion
-router.post('/', checkAuth, GalaxyController.galaxies_create_galaxy);
+router.post('/create', checkAuth, GalaxyController.galaxies_create_galaxy);
 
 //! Admin only function
 router.delete("/delete", checkAuth, GalaxyController.galaxies_delete_galaxy);

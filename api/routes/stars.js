@@ -12,7 +12,7 @@ router.get('/', StarController.stars_get_all);
 router.get('/star', StarController.stars_getOne_star);
 
 //! Admin only function
-router.post('/getOne', checkAuth, StarController.stars_create_star);
+router.post('/create', checkAuth, StarController.stars_create_star);
 
 //! Admin only function
 router.delete("/delete", checkAuth, StarController.stars_delete_star);
