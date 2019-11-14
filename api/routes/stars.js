@@ -4,6 +4,8 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const Star = require('../models/star');
 
+const checkAuth = require('../middleware/check-auth');
+
 router.get('/', (req, res, next) => {
     Star.find()
         .select("_id starName starDistance starDescription")
@@ -41,7 +43,7 @@ router.get('/', (req, res, next) => {
 });
 
 //! Admin only function
-router.post('/', (req, res) => {
+router.post('/', checkAuth, (req, res, next) => {
     console.log('Inside POST');
     const star = new Star({
         _id: new mongoose.Types.ObjectId(),
@@ -103,7 +105,7 @@ router.get('/:starId', (req, res, next) => {
 });
 
 //! Admin only function
-router.patch("/:starId", (req, res, next) => {
+router.patch("/:starId", checkAuth, (req, res, next) => {
     const id = req.params.starId; //TODO: req.body & starName
     const updateOps = {};
     for (const ops of req.body) {
@@ -130,7 +132,7 @@ router.patch("/:starId", (req, res, next) => {
 })
 
 //! Admin only function
-router.delete("/:starId", (req, res, next) => {
+router.delete("/:starId", checkAuth, (req, res, next) => {
     const id = req.params.starId; //TODO: req.body & on starName
     Star.remove({ _id: id })
         .exec()

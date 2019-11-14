@@ -4,6 +4,8 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const Galaxy = require('../models/galaxy');
 
+const checkAuth = require('../middleware/check-auth');
+
 router.get('/', (req, res, next) => {
     Galaxy.find()
         .select("_id galaxyName")
@@ -42,7 +44,7 @@ router.get('/', (req, res, next) => {
 
 
 //! Admin only funtion
-router.post('/', (req, res) => {
+router.post('/', checkAuth, (req, res) => {
     console.log('Inside POST');
     const galaxy = new Galaxy({
         _id: new mongoose.Types.ObjectId(),
@@ -102,7 +104,7 @@ router.get('/:galaxyId', (req, res, next) => {
 });
 
 //! Admin only function
-router.patch("/:galaxyId", (req, res, next) => {
+router.patch("/:galaxyId", checkAuth, (req, res, next) => {
     const id = req.params.galaxyId; //TODO: req.body & on galaxyName
     const updateOps = {};
     for (const ops of req.body) {
@@ -129,7 +131,7 @@ router.patch("/:galaxyId", (req, res, next) => {
 })
 
 //! Admin only function
-router.delete("/:galaxyId", (req, res, next) => {
+router.delete("/:galaxyId", checkAuth, (req, res, next) => {
     const id = req.params.galaxyId; //TODO: req.body & on galaxyName
     Galaxy.remove({ _id: id })
         .exec()
