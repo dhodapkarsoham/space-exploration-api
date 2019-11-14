@@ -13,6 +13,7 @@ const mongoose = require('mongoose');
 // ROUTES DECLARATION
 const galaxyRoutes = require('./api/routes/galaxies');
 const starRoutes = require('./api/routes/stars');
+const userRoutes = require('./api/routes/user');
 
 //TODO: REMOVE BEFORE FINAL DEPLOYMENT
 const pwd = process.env.MONGO_ATLAS_CONN;
@@ -50,6 +51,7 @@ app.use(bodyParser.json());
 // Routes to handle requests
 app.use('/galaxies', galaxyRoutes);
 app.use('/stars', starRoutes);
+app.use('/user', userRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not found');
