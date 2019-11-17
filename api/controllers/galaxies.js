@@ -4,7 +4,7 @@ const Galaxy = require('../models/galaxy');
 
 exports.galaxies_get_all = (req, res, next) => {
     Galaxy.find()
-        .select("_id galaxyName galaxyName galaxyDistance")
+        .select("_id galaxyName galaxyName galaxyDistance galaxyDescription")
         .exec()
         .then(docs => {
             const response = {
