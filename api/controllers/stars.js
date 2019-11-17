@@ -4,6 +4,7 @@ const Star = require('../models/star');
 
 exports.stars_get_all = (req, res, next) => {
     Star.find()
+        .sort({galaxyName: 1})
         .select("_id starName starDistance starDescription")
         .exec()
         .then(docs => {

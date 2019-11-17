@@ -4,6 +4,7 @@ const Galaxy = require('../models/galaxy');
 
 exports.galaxies_get_all = (req, res, next) => {
     Galaxy.find()
+        .sort({galaxyName: 1})
         .select("_id galaxyName galaxyDistance galaxyDescription")
         .exec()
         .then(docs => {
