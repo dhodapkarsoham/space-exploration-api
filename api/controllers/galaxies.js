@@ -16,11 +16,7 @@ exports.galaxies_get_all = (req, res, next) => {
                         _id: doc._id,
                         galaxyName: doc.galaxyName,
                         galaxyDistance: doc.galaxyDistance,
-                        galaxyDescription: doc.galaxyDescription,
-                        request: {
-                            type: "GET",
-                            url: "http://localhost:5000/galaxies/" + doc.galaxyName
-                        }
+                        galaxyDescription: doc.galaxyDescription
                     }
                 })
             };
@@ -53,11 +49,7 @@ exports.galaxies_create_galaxy = (req, res) => {
                     galaxyName:result.galaxyName,
                     galaxyDistance:result.galaxyDistance,
                     galaxyDescription:result.galaxyDescription,
-                    _id: result._id,
-                    request: {
-                        type: "GET",
-                        url: "http://localhost:5000/galaxies/" + result.galaxyName
-                    }
+                    _id: result._id
                 }
             });
         })
@@ -97,12 +89,7 @@ exports.galaxies_delete_galaxy = (req, res, next) => {
         .exec()
         .then(result => {
             res.status(200).json({
-                message: "Galaxy deleted from database",
-                request: {
-                    type: "POST",
-                    url: "https://localhost:5000/galaxies",
-                    body: { galaxyName: 'String', galaxyDistance: 'String', galaxyDescription: 'String'}
-                }
+                message: "Galaxy deleted from database"
             });
         })
         .catch(err => {

@@ -16,11 +16,7 @@ exports.stars_get_all = (req, res, next) => {
                         _id: doc._id,
                         starName: doc.starName,
                         starDistance: doc.starDistance,
-                        starDescription: doc.starDescription,
-                        request: {
-                            type: "GET",
-                            url: "http://localhost:5000/stars/" + doc.starName
-                        }
+                        starDescription: doc.starDescription
                     }
                 })
             };
@@ -53,11 +49,7 @@ exports.stars_create_star = (req, res, next) => {
                     starName: result.starName,
                     starDistance: result.starDistance,
                     starDescription: result.starDescription,
-                    _id: result._id,
-                    request: {
-                        type: "GET",
-                        url: "http://localhost:5000/stars/" + result.starName
-                    }
+                    _id: result._id
                 }
             });
         })
@@ -99,12 +91,7 @@ exports.stars_delete_star = (req, res, next) => {
         .exec()
         .then(result => {
             res.status(200).json({
-                message: "Star deleted from the database",
-                request: {
-                    type: "POST",
-                    url: "https://localhost:5000/stars",
-                    body: { starName: 'String', starDistance: 'String', starDescription: 'String'}
-                }
+                message: "Star deleted from the database"
             });
         })
         .catch(err => {
