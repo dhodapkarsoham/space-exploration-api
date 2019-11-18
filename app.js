@@ -13,11 +13,7 @@ const galaxyRoutes = require('./api/routes/galaxies');
 const starRoutes = require('./api/routes/stars');
 const userRoutes = require('./api/routes/user');
 
-//TODO: REMOVE BEFORE FINAL DEPLOYMENT
-const pwd = process.env.MONGO_ATLAS_CONN;
-console.log(pwd);
-
-
+//  CONNECT TO THE DATABASE
 mongoose.connect(
     process.env.MONGO_ATLAS_CONN,
     {
@@ -26,13 +22,13 @@ mongoose.connect(
     }, 
     () => console.log('DB connected')
 );
-mongoose.Promise = global.Promise;
 
+mongoose.Promise = global.Promise;
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-//TODO: PUSH CHANGES
+// HANDLING CORS
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");

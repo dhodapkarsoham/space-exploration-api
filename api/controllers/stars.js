@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const Star = require('../models/star');
 
+// GET ALL STARS ENDPOINT
 exports.stars_get_all = (req, res, next) => {
     Star.find()
         .sort({starName: 1})
@@ -18,7 +19,7 @@ exports.stars_get_all = (req, res, next) => {
                         starDescription: doc.starDescription,
                         request: {
                             type: "GET",
-                            url: "http://localhost:5000/stars/" + doc._id
+                            url: "http://localhost:5000/stars/" + doc.starName
                         }
                     }
                 })
@@ -33,6 +34,7 @@ exports.stars_get_all = (req, res, next) => {
         });
 }
 
+// CREATE STAR ENDPOINT
 exports.stars_create_star = (req, res, next) => {
     console.log('Inside POST');
     const star = new Star({
@@ -54,7 +56,7 @@ exports.stars_create_star = (req, res, next) => {
                     _id: result._id,
                     request: {
                         type: "GET",
-                        url: "http://localhost:5000/stars/" + result._id
+                        url: "http://localhost:5000/stars/" + result.starName
                     }
                 }
             });
@@ -68,9 +70,8 @@ exports.stars_create_star = (req, res, next) => {
 
 }
 
+// GET ONE STAR ENDPOINT
 exports.stars_getOne_star = (req, res, next) => {
-
-    // const id = req.params.starId; //TODO: req.body & starName
     const name = req.body.starName;
     Star.find({starName: name})
         .select("_id starName starDistance starDescription")
@@ -91,8 +92,8 @@ exports.stars_getOne_star = (req, res, next) => {
         })
 }
 
+// DELETE STAR ENDPOINT
 exports.stars_delete_star = (req, res, next) => {
-    // const id = req.params.starId; //TODO: req.body & on starName
     const name = req.body.starName;
     Star.remove({ starName: name })
         .exec()
@@ -118,7 +119,7 @@ exports.stars_delete_star = (req, res, next) => {
 //* PUTTING IT IN FUTURE SCOPE, A BIT MORE OF A WORK
 
 // exports.stars_update_star = (req, res, next) => {
-//     const id = req.params.starId; //TODO: req.body & starName
+//     const id = req.params.starId;
 //     const updateOps = {};
 //     for (const ops of req.body) {
 //         updateOps[ops.propName] = ops.value;

@@ -18,6 +18,7 @@ router.post('/create', checkAuth, GalaxyController.galaxies_create_galaxy);
 router.delete("/delete", checkAuth, GalaxyController.galaxies_delete_galaxy);
 
 //! Admin only function
+
 //* FUTURE SCOPE
 // router.patch("/update", checkAuth, GalaxyController.galaxies_update_galaxy)
 

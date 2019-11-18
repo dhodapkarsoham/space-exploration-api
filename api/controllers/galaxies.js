@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const Galaxy = require('../models/galaxy');
 
+// GET ALL GALAXIES ENDPOINT
 exports.galaxies_get_all = (req, res, next) => {
     Galaxy.find()
         .sort({galaxyName: 1})
@@ -18,7 +19,7 @@ exports.galaxies_get_all = (req, res, next) => {
                         galaxyDescription: doc.galaxyDescription,
                         request: {
                             type: "GET",
-                            url: "http://localhost:5000/galaxies/" + doc._id
+                            url: "http://localhost:5000/galaxies/" + doc.galaxyName
                         }
                     }
                 })
@@ -33,6 +34,7 @@ exports.galaxies_get_all = (req, res, next) => {
         });
 }
 
+// CREATE GALAXY ENDPOINT
 exports.galaxies_create_galaxy = (req, res) => {
     console.log('Inside POST');
     const galaxy = new Galaxy({
@@ -54,7 +56,7 @@ exports.galaxies_create_galaxy = (req, res) => {
                     _id: result._id,
                     request: {
                         type: "GET",
-                        url: "http://localhost:5000/galaxies/" + result._id
+                        url: "http://localhost:5000/galaxies/" + result.galaxyName
                     }
                 }
             });
@@ -68,9 +70,8 @@ exports.galaxies_create_galaxy = (req, res) => {
         });
 }
 
+// GET ONE GALAXY ENDPOINT
 exports.galaxies_getOne_galaxy = (req, res, next) => {
-
-    // const id = req.params.galaxyId; //TODO: req.body & galaxyName
     const name = req.body.galaxyName; 
     Galaxy.find({galaxyName: name})
         .select("_id galaxyName galaxyDistance galaxyDescription")
@@ -89,8 +90,8 @@ exports.galaxies_getOne_galaxy = (req, res, next) => {
         });
 }
 
+// DELETE GALAXY ENDPOINT
 exports.galaxies_delete_galaxy = (req, res, next) => {
-    // const id = req.params.galaxyId; //TODO: req.body & on galaxyName
     const name = req.body.galaxyName;
     Galaxy.remove({ galaxyName: name })
         .exec()
@@ -115,7 +116,7 @@ exports.galaxies_delete_galaxy = (req, res, next) => {
 //* PUTTING IT IN FUTURE SCOPE, A BIT MORE OF A WORK
 
 // exports.galaxies_update_galaxy = (req, res, next) => {
-    // const id = req.params.galaxyId; //TODO: req.body & on galaxyName
+    // const id = req.params.galaxyId; 
 //     const name = req.body.galaxyName;
 //     const updateOps = {};
 //     for (const ops of req.body) {
